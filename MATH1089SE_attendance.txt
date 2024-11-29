@@ -1,3 +1,2 @@
 Student ID,Student Name
-L9877,Maja Henry
 L6700,Fatima Johannes

@@ -518,7 +518,7 @@ private void setupUpdateClassButton() {
                     classInfo.saveToFile();
 
                     // Update classes.txt to reflect the class change
-                    updateClassesFile(oldClassID, newClassID, newSubject, newGradeLevel, newExamType); // Pass all updated values
+                    updateClassesFile(oldClassID, newClassID,newGradeLevel, newSubject ,newExamType); // Pass all updated values
 
 
                     // If class ID has changed, delete the old class and attendance files
@@ -613,7 +613,7 @@ private void createNewAttendanceAndGradebookFiles(String classID) throws IOExcep
     // Create new gradebook file
     if (gradebookFile.createNewFile()) {
         List<String> gradebookContent = new ArrayList<>();
-        gradebookContent.add("Student ID, Student Name, Assignments, Midterm, Final Exam, Overall Grade");
+        gradebookContent.add("Student ID, Student Name,Average");
 
         File classFile = new File(classID + ".txt");
         if (classFile.exists()) {

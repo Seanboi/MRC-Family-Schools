@@ -1,0 +1,5 @@
+S1045, Adijah, Brown, Biology Teacher, 1978/04/30, [contactinfo@b684286], Emergency Contact: [Name: Sharence Brown, Aunt,8765456809]
+S1023, Angel,Bell Position: English Teacher, DOB: 1980/06/15, Contact Info: [contactinfo@59a6e353], Emergency Contact: [Donica Bell, Wife,8764567890]
+S1036, Deandre,Pinecock, Position: IT Teacher, DOB: 1960/01/19, Contact Info: [contactinfo@7a0ac6e3], Emergency Contact: [Reanna Pinecock, Sister-in-law,8765567890]
+S1067, Delight,Burton, Position: Physics Teacher, DOB: 1980/05/22, Contact Info: [contactinfo@71be98f5], Emergency Contact: [Jabari Burton, Brother,8765452345]
+S1024, Shari,Deal, Position: Math Teacher, DOB: 1990/07/16, Contact Info: [contactinfo@6fadae5d], Emergency Contact: [Marissa Deal, Wife, 8762346789]

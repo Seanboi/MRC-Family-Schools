@@ -1,0 +1,7 @@
+L1303,Emily,Brown,2006/09/10,18,13,Immaculate Conception,8764567890,emilybrown@gmail.com,14 Constant Spring Road,Andrew,Brown,Father,8762345678,andrewbrown@gmail.com
+L1308,James,Harris,2006/10/10,18,13,Campion College,8767654321,jamesharris@gmail.com,12 Golden Spring Road,Diane,Harris,Mother,8762109876,dianeharris@gmail.com
+L1302,Liam,Johnson,2006/07/22,18,13,Ardenne High,8763456789,liamjohnson@gmail.com,22 Barbican Close,Michelle,Johnson,Mother,8765678912,michellejohnson@gmail.com
+L5560,Jaeda,McDonald,2007/12/09,16,13,Imaculate,8763456789,jaymc@gmail.com,French Oak Mews,Wayne,McDonald,Father,8768765432,mcdonaldwayne@gmail.com
+L1305,Isabella,Miller,2006/05/05,18,13,Wolmer's Girls,8767894321,isabellamiller@gmail.com,45 Red Hills Road,Paul,Miller,Father,8765432109,paulmiller@gmail.com
+L1307,Charlotte,White,2006/08/02,18,13,Hillel Academy,8768764321,charlottewhite@gmail.com,32 Cherry Gardens Lane,Robert,White,Father,8763210987,robertwhite@gmail.com
+L1304,Noah,Williams,2006/01/18,18,13,St. George's College,8766781234,noahwilliams@gmail.com,30 Hope Boulevard,Linda,Williams,Mother,8768765432,lindawilliams@gmail.com

@@ -147,25 +147,45 @@ public class ClassManagement extends JPanel {
     private void createAttendanceFile(ClassInfo classInfo) {
         String classID = classInfo.getClassID();
         File attendanceFile = new File(classID + "_attendance.txt");
-        if (!attendanceFile.exists()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(attendanceFile))) {
+        File gradebookFile = new File(classID + "_gradebook.txt");
     
-                // Write header for the attendance file
-                writer.write("Student ID,Student Name");
-                writer.newLine();
+        try {
+            // Create attendance file
+            if (!attendanceFile.exists()) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(attendanceFile))) {
+                    writer.write("Student ID,Student Name");
+                    writer.newLine();
     
-                // If the class file contains students, add them to the attendance file
-                ArrayList<String> students = classInfo.getStudents();
-                for (String student : students) {
-                    String[] parts = student.split(" - "); // Assumes format "StudentID - StudentName"
-                    if (parts.length == 2) {
-                        writer.write(parts[0] + "," + parts[1]); 
-                        writer.newLine();
+                    ArrayList<String> students = classInfo.getStudents();
+                    for (String student : students) {
+                        String[] parts = student.split(" - ");
+                        if (parts.length == 2) {
+                            writer.write(parts[0] + "," + parts[1]); 
+                            writer.newLine();
+                        }
                     }
                 }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error creating attendance file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+    
+            // Create gradebook file
+            if (!gradebookFile.exists()) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(gradebookFile))) {
+                    writer.write("Student ID,Student Name,Average");
+                    writer.newLine();
+    
+                    ArrayList<String> students = classInfo.getStudents();
+                    for (String student : students) {
+                        String[] parts = student.split(" - ");
+                        if (parts.length == 2) {
+                            // Initialize with default values
+                            writer.write(parts[0] + "," + parts[1] + ",0,0,0,0"); 
+                            writer.newLine();
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error creating attendance/gradebook files: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -297,7 +317,7 @@ public class ClassManagement extends JPanel {
                     classInfo.saveToFile();
     
                     // Update attendance file with new students
-                    updateAttendanceFile(classID, sortByLastName(addedStudents));
+                    updateAttendanceAndGradebookFiles(classID, sortByLastName(addedStudents));
     
                     JOptionPane.showMessageDialog(this, "Students assigned successfully!");
                 } catch (Exception ex) {
@@ -319,39 +339,51 @@ public class ClassManagement extends JPanel {
     }
     
     // Method to update the attendance file with new students
-private void updateAttendanceFile(String classID, ArrayList<String> addedStudents) {
-    File attendanceFile = new File(classID + "_attendance.txt");
-
-    // Read existing attendance records to avoid duplicates
-    ArrayList<String> existingStudentIDs = new ArrayList<>();
-    if (attendanceFile.exists()) {
+    private void updateAttendanceAndGradebookFiles(String classID, ArrayList<String> addedStudents) {
+        File attendanceFile = new File(classID + "_attendance.txt");
+        File gradebookFile = new File(classID + "_gradebook.txt");
+    
+        // Read existing attendance and gradebook records to avoid duplicates
+        ArrayList<String> existingStudentIDs = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(attendanceFile))) {
             String line;
+            reader.readLine(); // Skip header
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 2) {
-                    existingStudentIDs.add(parts[0]); // Add StudentID to the list
-                }
+                existingStudentIDs.add(parts[0]);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error reading attendance file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-    }
-
-    // Append new students if they don't already exist
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(attendanceFile, true))) {
-        for (String student : addedStudents) {
-            String[] parts = student.split(" - "); // Assumes format "StudentID - StudentName"
-            if (parts.length == 2 && !existingStudentIDs.contains(parts[0])) {
-                writer.write(parts[0] + "," + parts[1]); // Default attendance entry
-                writer.newLine();
+    
+        // Append new students to attendance file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(attendanceFile, true))) {
+            for (String student : addedStudents) {
+                String[] parts = student.split(" - ");
+                if (parts.length == 2 && !existingStudentIDs.contains(parts[0])) {
+                    writer.write(parts[0] + "," + parts[1]); // Default attendance entry
+                    writer.newLine();
+                }
             }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating attendance file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error updating attendance file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    
+        // Append new students to gradebook file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(gradebookFile, true))) {
+            for (String student : addedStudents) {
+                String[] parts = student.split(" - ");
+                if (parts.length == 2 && !existingStudentIDs.contains(parts[0])) {
+                    // Initialize with default grade values
+                    writer.write(parts[0] + "," + parts[1] + ",0,0,0,0");
+                    writer.newLine();
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating gradebook file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
 
     
     
@@ -472,11 +504,11 @@ private void setupUpdateClassButton() {
                     // If class ID has changed, delete the old class and attendance files
                     if (classIDChanged) {
                         deleteOldClassFile(oldClassID);
-                        deleteOldAttendanceFile(oldClassID); // Delete old attendance file
+                        deleteOldFiles(oldClassID);
                     }
 
                     // Create new attendance file for the updated class
-                    createNewAttendanceFile(newClassID);
+                    createNewAttendanceAndGradebookFiles(newClassID);
 
                     // Synchronize attendance file if needed
                     //synchronizeAttendanceFile(newClassID, newTeacher, classInfo);
@@ -528,44 +560,57 @@ private void updateClassesFile(String oldClassID, String newClassID, String newS
 
 
 // Helper method to create a new attendance file with student IDs and names
-private void createNewAttendanceFile(String classID) throws IOException {
+private void createNewAttendanceAndGradebookFiles(String classID) throws IOException {
     File attendanceFile = new File(classID + "_attendance.txt");
+    File gradebookFile = new File(classID + "_gradebook.txt");
 
-    // Delete the file if it already exists to ensure we start fresh
-    if (attendanceFile.exists()) {
-        attendanceFile.delete();
-    }
+    // Delete files if they already exist
+    if (attendanceFile.exists()) attendanceFile.delete();
+    if (gradebookFile.exists()) gradebookFile.delete();
 
-    // Create the new file
+    // Create new attendance file
     if (attendanceFile.createNewFile()) {
-        System.out.println("Created new attendance file: " + attendanceFile.getName());
+        List<String> attendanceContent = new ArrayList<>();
+        attendanceContent.add("Student ID, Student Name");
 
-        List<String> fileContent = new ArrayList<>();
-        fileContent.add("Student ID, Student Name"); // Add heading
-
-        // Read the students from the classid.txt file for this classID
-        File classFile = new File(classID + ".txt");  // Assuming classid.txt format is classID.txt
+        File classFile = new File(classID + ".txt");
         if (classFile.exists()) {
             List<String> studentLines = Files.readAllLines(classFile.toPath());
 
-            // Loop through the lines in the class file to extract student ID and name
             for (String line : studentLines) {
-                String[] parts = line.split(",");  // Assuming classid.txt has "studentID, studentName"
+                String[] parts = line.split(",");
                 if (parts.length == 2) {
-                    String studentID = parts[0].trim();  // Student ID
-                    String studentName = parts[1].trim();  // Student Name
-                    fileContent.add(studentID + ", " + studentName);  // Add student to the attendance file
+                    String studentID = parts[0].trim();
+                    String studentName = parts[1].trim();
+                    attendanceContent.add(studentID + ", " + studentName);
                 }
             }
-        } else {
-            System.out.println("Class file " + classID + ".txt not found.");
         }
 
-        // Write the data (headings + student list) to the new attendance file
-        Files.write(attendanceFile.toPath(), fileContent, StandardCharsets.UTF_8);
-        System.out.println("Attendance file content written successfully.");
-    } else {
-        System.out.println("Failed to create new attendance file: " + attendanceFile.getName());
+        Files.write(attendanceFile.toPath(), attendanceContent, StandardCharsets.UTF_8);
+    }
+
+    // Create new gradebook file
+    if (gradebookFile.createNewFile()) {
+        List<String> gradebookContent = new ArrayList<>();
+        gradebookContent.add("Student ID, Student Name, Assignments, Midterm, Final Exam, Overall Grade");
+
+        File classFile = new File(classID + ".txt");
+        if (classFile.exists()) {
+            List<String> studentLines = Files.readAllLines(classFile.toPath());
+
+            for (String line : studentLines) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String studentID = parts[0].trim();
+                    String studentName = parts[1].trim();
+                    // Initialize with default grade values
+                    gradebookContent.add(studentID + ", " + studentName + ", 0, 0, 0, 0");
+                }
+            }
+        }
+
+        Files.write(gradebookFile.toPath(), gradebookContent, StandardCharsets.UTF_8);
     }
 }
 
@@ -591,22 +636,25 @@ private void deleteOldClassFile(String oldClassID) {
 }
 
 
-// Method to delete the old attendance file after the update
-private void deleteOldAttendanceFile(String oldClassID) throws IOException {
-    String filePath = oldClassID + "_attendance.txt";
-    File oldAttendanceFile = new File(filePath); // Path to the old attendance file
+private void deleteOldFiles(String oldClassID) throws IOException {
+    String attendanceFilePath = oldClassID + "_attendance.txt";
+    String gradebookFilePath = oldClassID + "_gradebook.txt";
+    
+    File oldAttendanceFile = new File(attendanceFilePath);
+    File oldGradebookFile = new File(gradebookFilePath);
+    
     if (oldAttendanceFile.exists()) {
-        if (oldAttendanceFile.delete()) {
-            System.out.println("Old attendance file deleted successfully.");
-        } else {
+        if (!oldAttendanceFile.delete()) {
             throw new IOException("Failed to delete the old attendance file.");
         }
-    } else {
-        throw new IOException("Old attendance file does not exist.");
+    }
+    
+    if (oldGradebookFile.exists()) {
+        if (!oldGradebookFile.delete()) {
+            throw new IOException("Failed to delete the old gradebook file.");
+        }
     }
 }
-
-
 
 
 
@@ -632,6 +680,10 @@ private void setupDeleteClassButton() {
                 File attendanceFile = new File(classID + "_attendance.txt");
                 if (attendanceFile.exists()) attendanceFile.delete();
 
+                File gradebookFile = new File(classID + "_gradebook.txt");
+                if (gradebookFile.exists()) gradebookFile.delete();
+
+
                 // Update the classes.txt file to remove the deleted class
                 ArrayList<String> updatedLines = new ArrayList<>();
                 try (BufferedReader reader = new BufferedReader(new FileReader("classes.txt"))) {
@@ -649,7 +701,7 @@ private void setupDeleteClassButton() {
                 }
 
                 loadClasses();
-                JOptionPane.showMessageDialog(this, "Class and associated attendance file deleted successfully!");
+                JOptionPane.showMessageDialog(this, "Class and associated attendance and gradebook files deleted successfully!");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error deleting class: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }

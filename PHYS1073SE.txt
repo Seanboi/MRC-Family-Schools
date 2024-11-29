@@ -1,0 +1,7 @@
+Grade Level: 10
+Subject: Physics
+Exam Type: CSEC
+Teacher: S1045, Adijah, Brown, Biology Teacher, 1978/04/30, [contactinfo@b684286], Emergency Contact: [Name: Sharence Brown, Aunt,8765456809]
+Students:
+- L9877 - Maja Henry
+- L6700 - Fatima Johannes

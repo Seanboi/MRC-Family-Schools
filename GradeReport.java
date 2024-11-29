@@ -51,6 +51,8 @@ public class GradeReport extends JFrame {
     private JButton searchID;
     private JButton searchname;
     private JFrame reportFrame;
+    private String gradebookfile;
+    private String attendancefile;
     
 
 
@@ -179,11 +181,6 @@ public class GradeReport extends JFrame {
             reportPanel.add(noResultLabel, BorderLayout.CENTER); 
         } else { 
             
-            JLabel classLabel = new JLabel("Class: " + "className",SwingConstants.CENTER);
-            classLabel.setFont(new Font("Arial", Font.BOLD, 20));
-            classLabel.setOpaque(true); 
-            reportPanel.add(classLabel); 
-
             JLabel separator = new JLabel("----------------------------------------------------------------------",SwingConstants.CENTER); 
             separator.setFont(new Font("Arial", Font.PLAIN, 20));
             separator.setOpaque(true);
@@ -213,7 +210,13 @@ public class GradeReport extends JFrame {
             gradeLabel.setFont(new Font("Arial",Font.PLAIN,20));
             gradeLabel.setOpaque(true);
             reportPanel.add(schooLabel);
-            
+
+            /*JLabel gradesLabel = new JLabel("Grades: " + getStudentGrades(s.getstudentID()) ,SwingConstants.CENTER);
+            gradesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            gradesLabel.setOpaque(true); 
+            reportPanel.add(gradesLabel); */
+
+
         }
     
         reportPanel.revalidate(); 
@@ -244,6 +247,8 @@ public class GradeReport extends JFrame {
         
     }
 
+    public void compareStudentname(){}
+
     private ArrayList<studentinfo> gatherStudentInfo(String file)
     {       
         ArrayList<studentinfo>students = new ArrayList<studentinfo>();
@@ -258,16 +263,17 @@ public class GradeReport extends JFrame {
                     String fName = nextLine[1];
                     String lName = nextLine[2];
                     String dob = nextLine[3];
-                    String grade = nextLine[4];
-                    String school = nextLine[5];
-                    String contactnum = nextLine[6];
-                    String email = nextLine[7];
-                    String addr = nextLine[8];
-                    String guardFName = nextLine[9];
-                    String guardLName = nextLine[10];
-                    String relation = nextLine[11];
-                    String guardnum = nextLine[12];
-                    String guardEmail = nextLine[13];
+                    String age = nextLine[4];
+                    String grade = nextLine[5];
+                    String school = nextLine[6];
+                    String contactnum = nextLine[7];
+                    String email = nextLine[8];
+                    String addr = nextLine[9];
+                    String guardFName = nextLine[10];
+                    String guardLName = nextLine[11];
+                    String relation = nextLine[12];
+                    String guardnum = nextLine[13];
+                    String guardEmail = nextLine[14];
 
                     guardianinfo guardian = new guardianinfo(guardFName,guardLName,relation,guardnum,guardEmail);
                     contactinfo contact = new contactinfo(contactnum, email, addr);
@@ -282,6 +288,41 @@ public class GradeReport extends JFrame {
         catch(IOException ioe)
         {}
         return students;
+    }
+
+    private String getStudentGrades(String studentID) {
+        StringBuilder grades = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(gradebookfile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 2 && data[0].equals(studentID)) {
+                    // Assuming grade data is in the second column (index 1)
+                    grades.append(data[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return grades.toString();
+    }
+
+    // Method to fetch attendance from a file based on student ID
+    private String getStudentAttendance(String studentID) {
+        StringBuilder attendance = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(attendancefile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 2 && data[0].equals(studentID)) {
+                    // Assuming attendance data is in the second column (index 1)
+                    attendance.append(data[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return attendance.toString();
     }
 
     
@@ -314,19 +355,6 @@ public class GradeReport extends JFrame {
             }
         
     
-
-
-    private ClassInfo classListSearch(ArrayList<studentinfo> students){
-        for (ClassInfo c:classList){
-          if (c.getStudents().equals(students)){
-            return c;
-          }
-        }
-          return null;
-      }
-
-
-
 public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

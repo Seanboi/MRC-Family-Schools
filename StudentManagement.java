@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.io.*;
+import java.sql.Driver;
+
 
 public class StudentManagement extends JPanel {
     private JTable grade10Table, grade11Table, grade12Table, grade13Table;
@@ -13,6 +15,7 @@ public class StudentManagement extends JPanel {
 
     public StudentManagement() {
         super(new BorderLayout());
+
     
         loadUsedIDs();
 
@@ -87,6 +90,10 @@ public class StudentManagement extends JPanel {
         setupDeleteFunctionality(deleteButton);
         setupSearchFunctionality(searchButton);
         setupSearchByNameFunctionality(searchByNameButton);
+
+       
+        setVisible(true);
+    
     }
     
 
@@ -565,5 +572,54 @@ public class StudentManagement extends JPanel {
         panel.add(row);
         panel.add(Box.createVerticalStrut(10)); 
     }
+
+    /*private static void createAndShowGUI() {
+     // Create a frame and set the content pane to the StudentManagement panel
+        JFrame frame = new JFrame("Student Management");
+      
+
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Create and set up the content pane.
+        StudentManagement newContentPane = new StudentManagement();
+        newContentPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(newContentPane);
+
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }
+        
+        public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    createAndShowGUI();
+                }
+            });
+    }*/
+
+ 
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(() -> {
+                JFrame frame = new JFrame("Student Management System");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 600);
     
-}
+                StudentManagement studentManagement = new StudentManagement();
+                frame.add(studentManagement);
+    
+                frame.setLocationRelativeTo(null); 
+                frame.setVisible(true);
+            });
+        }
+    
+
+    }
+
+    
+    
+
+

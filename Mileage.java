@@ -4,19 +4,19 @@ public class Mileage{
   /**Testing 1,2,3 */
   public static void main(String[] args){
     int miles;
-    double gallons, mpg
+    double gallons, mpg;
 
     //mpg = miles / gallons;
-    Scanner s = new Scanner(System.in)
+    Scanner s = new Scanner(System.in);
 
-    System.out.println("Enter miles and galllons: ")
+    System.out.println("Enter miles and galllons: ");
 
     miles = s.nextInt();
     gallons = s.nextDouble();
     mpg = miles/gallons;
 
     //output
-    System.out.println("Miles" + "Per" + "Gallon:" + mpg)
+    System.out.println("Miles" + "Per" + "Gallon:" + mpg);
 
   }
 }

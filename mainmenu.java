@@ -71,35 +71,35 @@ public class mainmenu extends JFrame{
 
     classbtn = new JButton("Class Management");
     classbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    classbtn.setPreferredSize(new Dimension(180, 40));
+    classbtn.setPreferredSize(new Dimension(200, 200));
     classbtn.setForeground(Color.WHITE);
     classbtn.setBackground(new Color(0, 120, 215)); 
     classbtn.setFocusPainted(false);
 
     gradebtn = new JButton("Grade Management");
     gradebtn.setFont(new Font("Arial", Font.BOLD, 14));
-    gradebtn.setPreferredSize(new Dimension(180, 40));
+    gradebtn.setPreferredSize(new Dimension(200, 200));
     gradebtn.setForeground(Color.WHITE);
     gradebtn.setBackground(new Color(0, 120, 215)); 
     gradebtn.setFocusPainted(false);
 
     attendbtn = new JButton("Attendance Management");
     attendbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    attendbtn.setPreferredSize(new Dimension(180, 40));
+    attendbtn.setPreferredSize(new Dimension(200, 200));
     attendbtn.setForeground(Color.WHITE);
     attendbtn.setBackground(new Color(0, 120, 215)); 
     attendbtn.setFocusPainted(false);
 
     staffbtn = new JButton("Staff Management");
     staffbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    staffbtn.setPreferredSize(new Dimension(180, 40));
+    staffbtn.setPreferredSize(new Dimension(200, 200));
     staffbtn.setForeground(Color.WHITE);
     staffbtn.setBackground(new Color(0, 120, 215)); 
     staffbtn.setFocusPainted(false);
 
     reportbtn = new JButton("Report Analytics");
     reportbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    reportbtn.setPreferredSize(new Dimension(180, 40));
+    reportbtn.setPreferredSize(new Dimension(200, 200));
     reportbtn.setForeground(Color.WHITE);
     reportbtn.setBackground(new Color(0, 120, 215)); 
     reportbtn.setFocusPainted(false);
@@ -111,16 +111,115 @@ public class mainmenu extends JFrame{
     Buttonpanel.add(staffbtn);
     Buttonpanel.add(reportbtn);
 
-    studentbtn.addActionListener(e -> new StudentManagement().setVisible(true));
-    classbtn.addActionListener(e -> new ClassManagement().setVisible(true));
-    gradebtn.addActionListener(e -> new GradeGUI().setVisible(true));
-    attendbtn.addActionListener(e -> new AttendanceManagement().setVisible(true));
-    staffbtn.addActionListener(e -> new StaffManager().setVisible(true));
-    reportbtn.addActionListener(e -> new GradeReport().setVisible(true));
+    studentbtn.addActionListener(new Stdbuttonlistener());
+    classbtn.addActionListener(new classListener());
+    gradebtn.addActionListener(new gradeListener());
+    attendbtn.addActionListener(new attendListener());
+    staffbtn.addActionListener(new StaffListener());
+    reportbtn.addActionListener(new reportListener());
 
     
     add(Buttonpanel,BorderLayout.CENTER);
     add(MainPanel,BorderLayout.NORTH);
 
     }
-}
+
+    private class Stdbuttonlistener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+           openStudentManagement();
+            }
+        }
+
+    private void openStudentManagement() {
+        StudentManagement s = new StudentManagement();
+        JFrame studFrame = new JFrame("Student Management");
+        studFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        studFrame.setSize(900, 600);
+        studFrame.add(s);
+        studFrame.setVisible(true);
+            }
+        
+
+    private class classListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            openClassManagement();
+                }
+            }
+
+    private void openClassManagement() {
+        ClassManagement c = new ClassManagement();
+        JFrame classFrame = new JFrame("Class Management");
+        classFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        classFrame.setSize(900, 600);
+        classFrame.add(c);
+        classFrame.setVisible(true);
+            }
+            
+    
+            
+    private class gradeListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+                openGradeManagement();
+                }
+            }
+
+    private void openGradeManagement() {
+        GradeManagement gradeManagement = new GradeManagement();
+        JFrame gradeFrame = new JFrame("Grade Management");
+        gradeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        gradeFrame.setSize(900, 600);
+        gradeFrame.add(gradeManagement);
+        gradeFrame.setVisible(true);
+            }
+        
+            
+    private class attendListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            openattendManagement();
+                }
+            }
+
+    private void openattendManagement() {
+        AttendanceManagement a = new AttendanceManagement();
+        JFrame attendFrame = new JFrame("Attendance Management");
+        attendFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        attendFrame.setSize(900, 600);
+        attendFrame.add(a);
+        attendFrame.setVisible(true);
+            }
+
+    private class StaffListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            openStaffManagement();
+                }
+            }
+
+    private void openStaffManagement() {
+        StaffManager s =  new StaffManager();
+        JFrame staffFrame = new JFrame("Staff Management");
+        staffFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        staffFrame.setSize(900, 600);
+        staffFrame.add(s);
+        staffFrame.setVisible(true);
+            }
+            
+    private class reportListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            openReportManagement();
+            }            
+        }
+
+    private void openReportManagement() {
+        GradeReport r = new GradeReport();
+        JFrame reportFrame = new JFrame("Report Management");
+        reportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        reportFrame.setSize(900, 600);
+        reportFrame.add(r);
+        reportFrame.setVisible(true);
+        }
+    }
+
+
+
+
+  

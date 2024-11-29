@@ -1,145 +1,96 @@
-import java.util.ArrayList;
-
-public class StaffInfo{
+public class StaffInfo {
     private String staffID;
-    private String fName;
-    private String lName;
+    private String fname;
+    private String lname;
     private String position;
     private String dateOfBirth;
     private contactinfo contactInfo;
     private EmergencyContact emergencyContact;
-    private ArrayList<StaffInfo> staffList = new ArrayList<>();
 
-    //Constuctor
-    public StaffInfo(String staffID, String fName, String lName, String position, String dateOfBith, contactinfo contactInfo, EmergencyContact emergencyContact){
+    public StaffInfo(String staffID, String fname, String lname, String position, String dateOfBirth,
+                     contactinfo contactInfo, EmergencyContact emergencyContact) {
         this.staffID = staffID;
-        this.fName = fName;
-        this.lName = fName;
+        this.fname = fname;
+        this.lname = lname;
         this.position = position;
-        this.dateOfBirth = dateOfBith;
+        this.dateOfBirth = dateOfBirth;
         this.contactInfo = contactInfo;
         this.emergencyContact = emergencyContact;
     }
 
-    //Generating a random ID for the Staff memebers
-
-    public String getStaffID(){
+    // Getters and setters
+    public String getStaffID() {
         return staffID;
     }
 
-    public String getFname(){
-        return fName;
-    }
-    
-    public void setFname(String fName){
-        this.fName = fName;
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 
-    public String getLname(){
-        return lName;
+    public String getFname() {
+        return fname;
     }
 
-    public void setLname(String lName){
-        this.lName = lName;
+    public void setFname(String fname) {
+        this.fname = fname;
     }
 
-    public String getPosition(){
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position){
+    public void setPosition(String position) {
         this.position = position;
     }
 
-    public String getDateOfBirth(){
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth){
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public contactinfo getContactInfo(){
+    public contactinfo getContactInfo() {
         return contactInfo;
     }
 
-    public void setContactInfo(contactinfo contactInfo){
+    public void setContactInfo(contactinfo contactInfo) {
         this.contactInfo = contactInfo;
     }
 
-    public EmergencyContact getemergencyContact(){
+    public EmergencyContact getemergencyContact() {
         return emergencyContact;
     }
 
-    public void setEmegencyContact(EmergencyContact emergencyContact){
+    public void setEmegencyContact(EmergencyContact emergencyContact) {
         this.emergencyContact = emergencyContact;
-    }
-
-    public ArrayList<StaffInfo>getStaffList(){
-        return staffList;
-    }
-
-    //Adding the new Staff to the Staff List
-    public void addStaff(StaffInfo q){
-        staffList.add(q);
-    }
-
-    
-
-    //Update the Staff Information
-    public void updateStaffInfo(String fName, String lName, String position, String dateOfBirth, contactinfo contactInfo, EmergencyContact emergencyContact) {
-        this.fName = fName;
-        this.lName = lName;
-        this.position = position;
-        this.dateOfBirth = dateOfBirth;
-        this.contactInfo = contactInfo;
-        this.emergencyContact = emergencyContact;
-    
-    }
-
-    //For logging/auditing
-    public String toString() {
-        return "Staff ID: " + staffID + ", First Name: " + fName + ",Last Name: " + lName + ", Position: " + position +
-                ", DOB: " + dateOfBirth + ", Contact Info: " + contactInfo + ", Emergency Contact: " + emergencyContact;
     }
 
     public static StaffInfo fromCSV(String csv) {
-        // Split the CSV string into parts using a comma as the delimiter
-        String[] parts = csv.split(",");
-        if (parts.length > 13) { // Adjust based on the required number of fields
-            System.err.println("Invalid staff CSV: " + csv);
+        String[] values = csv.split(",");
+        if (values.length < 13) {
             return null;
         }
-    
-        try {
-            // Parse contactinfo
-            contactinfo contact = new contactinfo(
-                parts[5].trim(), // email
-                parts[6].trim(), // phone
-                parts[7].trim()  // address
-            );
-    
-            // Parse emergency contact
-            EmergencyContact emergencyContact = new EmergencyContact(
-                parts[8].trim(), // emergency contact name
-                parts[9].trim(), // emergency contact phone
-                parts[10].trim() // emergency contact relation
-            );
-    
-            // Create and return the StaffInfo object
-            return new StaffInfo(
-                parts[0].trim(), // staffID (or generate in constructor)
-                parts[1].trim(), // fName
-                parts[2].trim(), // lName
-                parts[3].trim(), // position
-                parts[4].trim(), // dateOfBirth
-                contact,         // contactInfo
-                emergencyContact // emergencyContact
-            );
-        } catch (Exception e) {
-            System.err.println("Error parsing CSV: " + e.getMessage());
-            return null;
-        }
+        // Return new instance from CSV line data
+        return new StaffInfo(values[0], values[1], values[2], values[4], values[3],
+                             new contactinfo(values[5], values[6], values[7]),
+                             new EmergencyContact(values[8], values[9], values[10], values[11]));
     }
-    
+
+    @Override
+    public String toString() {
+        return staffID + "," + fname + "," + lname + "," + dateOfBirth + "," + position + "," +
+                contactInfo.gettelnum() + "," + contactInfo.getEmail() + "," + contactInfo.getaddress() + "," +
+                emergencyContact.getcontactName() + "," + emergencyContact.getrelationship() + "," +
+                emergencyContact.getcontactinfo() + "," + emergencyContact.getemail();
+    }
 }

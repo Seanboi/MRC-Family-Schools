@@ -11,9 +11,13 @@ public class StaffManager extends JPanel {
     private DefaultTableModel staffModel;
     private ArrayList<StaffInfo> staffList = new ArrayList<>();
     private HashSet<String> usedIDS = new HashSet<>();
+    private JButton backButton;
 
     public StaffManager() {
         super(new BorderLayout());
+
+        backButton = createButton("Back to Main Menu");
+        backButton.setBackground(new Color(0, 70, 140));
 
         // Load used IDs from the Staff.txt file
         loadUsedIDs();
@@ -57,6 +61,7 @@ public class StaffManager extends JPanel {
         buttonPanel.add(updateButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(searchButton);
+        buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Set up button functionalities
@@ -64,7 +69,19 @@ public class StaffManager extends JPanel {
         setupUpdateFunctionality(updateButton);
         setupDeleteFunctionality(deleteButton);
         setupSearchFunctionality(searchButton);
+        setupBackButton();
     }
+
+    private void setupBackButton() {
+
+        backButton.addActionListener(e -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+            window.dispose();
+            new mainmenu().setVisible(true);
+                }
+            });
+        }
 
     private JButton createButton(String label) {
         JButton button = new JButton(label);

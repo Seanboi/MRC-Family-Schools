@@ -18,7 +18,7 @@ public class ClassManagement extends JPanel {
   private DefaultTableModel tableModel;
   private JButton addClassButton, assignTeacherButton, assignStudentsButton, updateClassButton,
           deleteClassButton, viewClassButton, removeStudentButton, sortByGradeButton, sortBySubjectButton, 
-          viewStudentClassesButton, viewTeacherClassesButton;
+          viewStudentClassesButton, viewTeacherClassesButton,backButton;
 
   public ClassManagement() {
       super(new BorderLayout());
@@ -69,6 +69,10 @@ public class ClassManagement extends JPanel {
       sortBySubjectButton = createButton("Sort by Subject");
       viewStudentClassesButton = createButton("View Student Classes");
       viewTeacherClassesButton = createButton("View Teacher Classes");
+      backButton = createButton("Back to Main Menu");
+      backButton.setBackground(new Color(0, 70, 140));
+
+
 
       buttonPanel.add(addClassButton);
       buttonPanel.add(assignTeacherButton);
@@ -81,6 +85,7 @@ public class ClassManagement extends JPanel {
       buttonPanel.add(sortBySubjectButton);
       buttonPanel.add(viewStudentClassesButton);
       buttonPanel.add(viewTeacherClassesButton);
+      buttonPanel.add(backButton);
 
       add(buttonPanel, BorderLayout.SOUTH);
 
@@ -95,7 +100,22 @@ public class ClassManagement extends JPanel {
       setupViewStudentClassesButton();
       setupViewTeacherClassesButton();
       setupSortButtons();
+      setupBackButton();
+
   }
+
+  private void setupBackButton() {
+
+    backButton.addActionListener(e -> {
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof JFrame) {
+        window.dispose();
+        new mainmenu().setVisible(true);
+            }
+        });
+    }
+
+
 
     private JButton createButton(String label) {
       String wrappedLabel = "<html><center>" + label.replace(" ", "<br>") + "</center></html>";

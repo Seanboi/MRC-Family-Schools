@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.*;
 
 import java.awt.event.ActionListener;
@@ -53,6 +54,8 @@ public class GradeReport extends JFrame {
     private JFrame reportFrame;
     private String gradebookfile;
     private String attendancefile;
+    private JButton backButton;
+
     
 
 
@@ -81,6 +84,8 @@ public class GradeReport extends JFrame {
         for(studentinfo s: students4){
             students.add(s);
         }
+
+
 
         setSize(800,600);
 
@@ -118,13 +123,28 @@ public class GradeReport extends JFrame {
         searchname.setBackground(new Color(0, 120, 215)); 
         searchname.setFocusPainted(false);
 
+        
+        backButton = new JButton("Back to Main Menu");
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        backButton.setPreferredSize(new Dimension(180, 40));
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(new Color(0, 120, 215));
+        backButton.setFocusPainted(false);
+
+
 
         searchID.addActionListener(new SearchIDListener());
         searchname.addActionListener(new SearchnameListener());
+        backButton.addActionListener(e -> {
+            dispose();  
+            new mainmenu().setVisible(true); 
+        });
+        
         
 
         pnlCommand.add(searchID);
         pnlCommand.add(searchname);
+        pnlCommand.add(backButton);
         
 
 
@@ -143,7 +163,20 @@ public class GradeReport extends JFrame {
         setVisible(true);
 
         
+
+        
     }
+
+    private void setupBackButton() {
+
+        backButton.addActionListener(e -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+            window.dispose();
+            new mainmenu().setVisible(true);
+                }
+            });
+        }
 
 
     public ArrayList<studentinfo> getstudents(){

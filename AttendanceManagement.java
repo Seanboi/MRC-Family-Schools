@@ -8,10 +8,15 @@ import java.io.IOException;
 public class AttendanceManagement extends JPanel {
     private JTable classesTable;
     private DefaultTableModel tableModel;
-    private JButton markAttendanceButton, viewAttendanceButton;
+    private JButton markAttendanceButton, viewAttendanceButton,backButton;
 
     public AttendanceManagement() {
         super(new BorderLayout());
+
+        backButton = createButton("Back to Main Menu");
+        backButton.setBackground(new Color(0, 70, 140));
+
+        
 
         // Add Title Label
         JLabel titleLabel = new JLabel("MRC ATTENDANCE MANAGEMENT", SwingConstants.CENTER);
@@ -46,6 +51,10 @@ public class AttendanceManagement extends JPanel {
         // Buttons Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(new Color(0, 70, 140));
+        buttonPanel.add(backButton);
+
+        
+        setupBackButton();
 
         markAttendanceButton = createButton("Mark Attendance");
         viewAttendanceButton = createButton("View Attendance");
@@ -62,6 +71,18 @@ public class AttendanceManagement extends JPanel {
         setupMarkAttendanceButton();
         setupViewAttendanceButton();
     }
+
+    private void setupBackButton() {
+
+        backButton.addActionListener(e -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+            window.dispose();
+            new mainmenu().setVisible(true);
+                }
+            });
+        }
+
 
     private JButton createButton(String label) {
         JButton button = new JButton(label);

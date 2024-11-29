@@ -1,225 +1,173 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.table.*;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
 import java.awt.*;
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Driver;
+import java.awt.event.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
-import java.util.Collections;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-public class mainmenu extends JFrame{
-
+public class mainmenu extends JFrame {
     private JPanel MainPanel;
-    private JPanel Buttonpanel;
     private JButton studentbtn, classbtn, gradebtn, staffbtn, reportbtn, attendbtn;
 
+    public mainmenu() {
+        setTitle("School Management System");
+        setSize(1000, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-    public mainmenu(){
+        // Main panel with white background
+        MainPanel = new JPanel(new BorderLayout());
+        MainPanel.setBackground(Color.WHITE);
+        MainPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 70, 140), 2));
 
-    MainPanel = new JPanel();
-    MainPanel.setLayout(new BoxLayout(MainPanel,BoxLayout.Y_AXIS));
-    MainPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 70, 140), 2));
+        // Title Panel
+        JLabel titleLabel = new JLabel("WELCOME TO THE MAIN MENU");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(new Color(0, 70, 140));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+        MainPanel.add(titleLabel, BorderLayout.NORTH);
 
-    Buttonpanel = new JPanel();
-    Buttonpanel.setLayout(new BoxLayout(Buttonpanel,BoxLayout.Y_AXIS));
-    Buttonpanel.setBorder(BorderFactory.createLineBorder(new Color(0, 70, 140), 2));
+        // Grid Panel for buttons
+        JPanel gridPanel = new JPanel(new GridLayout(2, 3, 30, 30));
+        gridPanel.setBackground(Color.WHITE);
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 50));
 
-    setTitle("Main Menu");
-    setLayout(new BorderLayout());
-    setSize(400, 300);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // Create buttons with unique styles
+        studentbtn = createStudentButton();
+        classbtn = createClassButton();
+        attendbtn = createAttendanceButton();
+        gradebtn = createGradeButton();
+        staffbtn = createStaffButton();
+        reportbtn = createReportButton();
 
-        // Title label
-    JLabel lblTitle = new JLabel("Welcome to the Main Menu",SwingConstants.CENTER);
-    lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-    lblTitle.setOpaque(true);
-    lblTitle.setBackground(new Color(0, 70, 140));
-    lblTitle.setForeground(Color.WHITE);
-    lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-    MainPanel.add(lblTitle);
+        // Add buttons to grid
+        gridPanel.add(studentbtn);
+        gridPanel.add(classbtn);
+        gridPanel.add(attendbtn);
+        gridPanel.add(gradebtn);
+        gridPanel.add(staffbtn);
+        gridPanel.add(reportbtn);
 
-    studentbtn = new JButton("Student Management");
-    studentbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    studentbtn.setPreferredSize(new Dimension(200, 200));
-    studentbtn.setForeground(Color.WHITE);
-    studentbtn.setBackground(new Color(0, 120, 215)); 
-    studentbtn.setFocusPainted(false);
+        MainPanel.add(gridPanel, BorderLayout.CENTER);
 
-    classbtn = new JButton("Class Management");
-    classbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    classbtn.setPreferredSize(new Dimension(200, 200));
-    classbtn.setForeground(Color.WHITE);
-    classbtn.setBackground(new Color(0, 120, 215)); 
-    classbtn.setFocusPainted(false);
+        // Add action listeners
+        studentbtn.addActionListener(e -> openStudentManagement());
+        classbtn.addActionListener(e -> openClassManagement());
+        gradebtn.addActionListener(e -> openGradeManagement());
+        attendbtn.addActionListener(e -> openattendManagement());
+        staffbtn.addActionListener(e -> openStaffManagement());
+        reportbtn.addActionListener(e -> openReportManagement());
 
-    gradebtn = new JButton("Grade Management");
-    gradebtn.setFont(new Font("Arial", Font.BOLD, 14));
-    gradebtn.setPreferredSize(new Dimension(200, 200));
-    gradebtn.setForeground(Color.WHITE);
-    gradebtn.setBackground(new Color(0, 120, 215)); 
-    gradebtn.setFocusPainted(false);
-
-    attendbtn = new JButton("Attendance Management");
-    attendbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    attendbtn.setPreferredSize(new Dimension(200, 200));
-    attendbtn.setForeground(Color.WHITE);
-    attendbtn.setBackground(new Color(0, 120, 215)); 
-    attendbtn.setFocusPainted(false);
-
-    staffbtn = new JButton("Staff Management");
-    staffbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    staffbtn.setPreferredSize(new Dimension(200, 200));
-    staffbtn.setForeground(Color.WHITE);
-    staffbtn.setBackground(new Color(0, 120, 215)); 
-    staffbtn.setFocusPainted(false);
-
-    reportbtn = new JButton("Report Analytics");
-    reportbtn.setFont(new Font("Arial", Font.BOLD, 14));
-    reportbtn.setPreferredSize(new Dimension(200, 200));
-    reportbtn.setForeground(Color.WHITE);
-    reportbtn.setBackground(new Color(0, 120, 215)); 
-    reportbtn.setFocusPainted(false);
-
-    Buttonpanel.add(studentbtn);
-    Buttonpanel.add(classbtn);
-    Buttonpanel.add(gradebtn);
-    Buttonpanel.add(attendbtn);
-    Buttonpanel.add(staffbtn);
-    Buttonpanel.add(reportbtn);
-
-    studentbtn.addActionListener(new Stdbuttonlistener());
-    classbtn.addActionListener(new classListener());
-    gradebtn.addActionListener(new gradeListener());
-    attendbtn.addActionListener(new attendListener());
-    staffbtn.addActionListener(new StaffListener());
-    reportbtn.addActionListener(new reportListener());
-
-    
-    add(Buttonpanel,BorderLayout.CENTER);
-    add(MainPanel,BorderLayout.NORTH);
-
+        add(MainPanel);
     }
 
-    private class Stdbuttonlistener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-           openStudentManagement();
-            }
-        }
+    // Individual button creation methods with unique styles
+    private JButton createStudentButton() {
+        JButton button = new JButton("<html><center>STUDENT<br>MANAGEMENT</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 70, 140)); // Royal blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
 
+    private JButton createClassButton() {
+        JButton button = new JButton("<html><center>CLASS<br>MANAGEMENT</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 90, 170)); // Slightly lighter blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
+
+    private JButton createAttendanceButton() {
+        JButton button = new JButton("<html><center>MARK<br>ATTENDANCE</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 110, 200)); // Light blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
+
+    private JButton createGradeButton() {
+        JButton button = new JButton("<html><center>GRADE<br>MANAGEMENT</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 130, 230)); // Bright blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
+
+    private JButton createStaffButton() {
+        JButton button = new JButton("<html><center>STAFF<br>MANAGEMENT</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 150, 255)); // Sky blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
+
+    private JButton createReportButton() {
+        JButton button = new JButton("<html><center>ANALYTICS &<br>REPORTS</center></html>");
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(30, 170, 255)); // Light sky blue
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(250, 150));
+        return button;
+    }
+
+    // Rest of the management window opening methods remain the same...
     private void openStudentManagement() {
         StudentManagement s = new StudentManagement();
-        JFrame studFrame = new JFrame("Student Management");
-        studFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        studFrame.setSize(900, 600);
-        studFrame.add(s);
-        studFrame.setVisible(true);
-            }
-        
-
-    private class classListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            openClassManagement();
-                }
-            }
+        openManagementWindow("Student Management", s);
+    }
 
     private void openClassManagement() {
         ClassManagement c = new ClassManagement();
-        JFrame classFrame = new JFrame("Class Management");
-        classFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        classFrame.setSize(900, 600);
-        classFrame.add(c);
-        classFrame.setVisible(true);
-            }
-            
-    
-            
-    private class gradeListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-                openGradeManagement();
-                }
-            }
+        openManagementWindow("Class Management", c);
+    }
 
     private void openGradeManagement() {
-        GradeManagement gradeManagement = new GradeManagement();
-        JFrame gradeFrame = new JFrame("Grade Management");
-        gradeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        gradeFrame.setSize(900, 600);
-        gradeFrame.add(gradeManagement);
-        gradeFrame.setVisible(true);
-            }
-        
-            
-    private class attendListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            openattendManagement();
-                }
-            }
+        GradeManagement g = new GradeManagement();
+        openManagementWindow("Grade Management", g);
+    }
 
     private void openattendManagement() {
         AttendanceManagement a = new AttendanceManagement();
-        JFrame attendFrame = new JFrame("Attendance Management");
-        attendFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        attendFrame.setSize(900, 600);
-        attendFrame.add(a);
-        attendFrame.setVisible(true);
-            }
-
-    private class StaffListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            openStaffManagement();
-                }
-            }
+        openManagementWindow("Attendance Management", a);
+    }
 
     private void openStaffManagement() {
-        StaffManager s =  new StaffManager();
-        JFrame staffFrame = new JFrame("Staff Management");
-        staffFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        staffFrame.setSize(900, 600);
-        staffFrame.add(s);
-        staffFrame.setVisible(true);
-            }
-            
-    private class reportListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            openReportManagement();
-            }            
-        }
+        StaffManager s = new StaffManager();
+        openManagementWindow("Staff Management", s);
+    }
 
     private void openReportManagement() {
         GradeReport r = new GradeReport();
-        JFrame reportFrame = new JFrame("Report Management");
-        reportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        reportFrame.setSize(900, 600);
-        reportFrame.add(r);
-        reportFrame.setVisible(true);
-        }
+        openManagementWindow("Report Management", r);
+            }
+        
+            private void openManagementWindow(String title, GradeReport r) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'openManagementWindow'");
+            }
+        
+            // Helper method to open management windows
+    private void openManagementWindow(String title, JComponent component) {
+        JFrame frame = new JFrame(title);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(900, 600);
+        frame.add(component);
+        frame.setVisible(true);
     }
-
-
-
-
-  
+}

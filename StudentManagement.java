@@ -12,6 +12,7 @@ public class StudentManagement extends JPanel {
     private DefaultTableModel grade10Model, grade11Model, grade12Model, grade13Model;
     private ArrayList<studentinfo> grade10List, grade11List, grade12List, grade13List;
     private HashSet<String> usedIDs = new HashSet<>();
+    private JButton backButton;
 
     public StudentManagement() {
         super(new BorderLayout());
@@ -77,12 +78,15 @@ public class StudentManagement extends JPanel {
         JButton deleteButton = createButton("Delete Student");
         JButton searchButton = createButton("Search by Student ID");
         JButton searchByNameButton = createButton("Search by Name");
+        backButton = createButton("Back to Main Menu");
+        backButton.setBackground(new Color(0, 70, 140));
     
         buttonPanel.add(addButton);
         buttonPanel.add(updateButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(searchButton);
         buttonPanel.add(searchByNameButton);
+        buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         setupAddFunctionality(addButton);
@@ -90,11 +94,23 @@ public class StudentManagement extends JPanel {
         setupDeleteFunctionality(deleteButton);
         setupSearchFunctionality(searchButton);
         setupSearchByNameFunctionality(searchByNameButton);
+        setupBackButton();
 
        
         setVisible(true);
     
     }
+
+    private void setupBackButton() {
+
+        backButton.addActionListener(e -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+            window.dispose();
+            new mainmenu().setVisible(true);
+                }
+            });
+        }
     
 
     private JButton createButton(String label) {

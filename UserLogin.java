@@ -104,7 +104,7 @@ public class UserLogin extends JFrame {
             mainmenu main = new mainmenu();
             UserLogin user = new UserLogin();
             main.setVisible(true);
-            user.setVisible(false);
+            setVisible(false);
             } else {
             JOptionPane.showMessageDialog(this, "Login failed. Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
             }

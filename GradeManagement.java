@@ -7,10 +7,13 @@ public class GradeManagement extends JPanel {
     private JTable classesTable;
     private DefaultTableModel tableModel;
     private JButton viewGradesButton;
-    private JButton openGradebookButton;
+    private JButton openGradebookButton, backButton;
 
     public GradeManagement() {
         super(new BorderLayout());
+
+        backButton = createButton("Back to Main Menu");
+        backButton.setBackground(new Color(0, 70, 140));
         
         // Add Title Label
         JLabel titleLabel = new JLabel("MRC GRADE MANAGEMENT", SwingConstants.CENTER);
@@ -49,6 +52,11 @@ public class GradeManagement extends JPanel {
         // Buttons Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(new Color(0, 70, 140));
+        buttonPanel.add(backButton);
+
+        
+        setupBackButton();
+
 
         viewGradesButton = createButton("View Grades");
         openGradebookButton = createButton("Open Gradebook");
@@ -61,6 +69,17 @@ public class GradeManagement extends JPanel {
         loadClasses();
         setupListeners();
     }
+
+    private void setupBackButton() {
+
+        backButton.addActionListener(e -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+            window.dispose();
+            new mainmenu().setVisible(true);
+                }
+            });
+        }
 
     private JButton createButton(String label) {
         JButton button = new JButton(label);
